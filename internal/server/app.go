@@ -4,6 +4,7 @@ import (
 	"cmp"
 	"food-server/internal/config"
 	"food-server/internal/server/actions/products"
+	"food-server/internal/server/middleware"
 	"food-server/internal/service/domain"
 	"food-server/internal/storage/postgres"
 
@@ -26,8 +27,10 @@ func New() Server {
 	// default host and port values.
 	r := server.New(
 		server.WithHost(cmp.Or(os.Getenv("HOST"), "0.0.0.0")),
-		server.WithPort(cmp.Or(os.Getenv("PORT"), "3000")),
+		server.WithPort(cmp.Or(os.Getenv("PORT"), "3001")),
 	)
+
+	r.Use(middleware.CORS)
 
 	db, err := config.DB()
 	if err != nil {
