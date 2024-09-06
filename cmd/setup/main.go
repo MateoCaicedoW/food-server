@@ -14,8 +14,9 @@ import (
 
 	// Load environment variables
 	_ "github.com/leapkit/leapkit/core/tools/envload"
-	// sqlite3 driver
-	_ "github.com/mattn/go-sqlite3"
+	
+	// Load the database driver
+	_ "github.com/lib/pq"
 )
 
 func main() {
