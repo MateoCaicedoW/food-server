@@ -5,6 +5,8 @@ import (
 	"food-server/internal/entities/product"
 	"food-server/internal/storage"
 	"food-server/system/validate"
+
+	"github.com/gofrs/uuid/v5"
 )
 
 type ProductService struct {
@@ -37,6 +39,24 @@ func (s ProductService) ValidateAndSave(c context.Context, p *product.Single) (v
 	}
 
 	err := s.ProductRepository.Create(c, p)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+func (s ProductService) GetByID(c context.Context, id uuid.UUID) (product.Single, error) {
+	return s.ProductRepository.GetByID(c, id)
+}
+
+func (s ProductService) ValidateAndUpdate(c context.Context, p *product.Single) (validate.Errors, error) {
+	errs := s.Validate(*p)
+	if errs.HasAny() {
+		return errs, nil
+	}
+
+	err := s.ProductRepository.Update(c, p)
 	if err != nil {
 		return nil, err
 	}
